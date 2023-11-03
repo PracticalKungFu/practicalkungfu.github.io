@@ -21,7 +21,7 @@ plugins:
       archive_toc: true
       categories_toc: true
       post_readtime: false
-      draft: false
+      draft_on_serve: true
       draft_if_future_date: true
   - search
   - rss:
