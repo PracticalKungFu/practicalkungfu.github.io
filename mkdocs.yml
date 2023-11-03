@@ -16,6 +16,7 @@ plugins:
       categories_toc: true
       post_readtime: false
       draft: false
+      draft_if_future_date: true
   - search
 
 markdown_extensions:
