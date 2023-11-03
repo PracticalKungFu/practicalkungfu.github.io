@@ -1,6 +1,7 @@
 site_name: PracticalKungFu.net
 site_url: https://www.practicalkungfu.net/
 repo_url: https://github.com/PracticalKungFu/practicalkungfu.github.io
+repo_name: practicalkungfu.github.io
 theme:
   name: material
   palette:
@@ -9,9 +10,13 @@ theme:
     - content.code.copy
     - content.code.select
     - navigation.instant
+    - navigation.tracking
+    - navigation.path
+    - navigation.top
 
 plugins:
   - blog:
+      blog_dir: ./
       blog_toc: true
       archive_toc: true
       categories_toc: true
@@ -20,7 +25,7 @@ plugins:
       draft_if_future_date: true
   - search
   - rss:
-      match_path: blog/posts/.* 
+      match_path: posts/.* 
       date_from_meta:
         as_creation: date
       categories:
@@ -37,6 +42,5 @@ markdown_extensions:
   - pymdownx.superfences
 
 nav:
-  - Home: index.md
-  - Blog: blog/index.md
+  - Articles: index.md
   - About: about.md
