@@ -1,4 +1,5 @@
 ---
+comments: true
 draft: true
 date: 1900-01-01
 categories:
