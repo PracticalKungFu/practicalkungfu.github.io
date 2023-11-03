@@ -1,5 +1,6 @@
 site_name: PracticalKungFu.net
-site_url: https://practicalkungfu.net/
+site_url: https://www.practicalkungfu.net/
+repo_url: https://github.com/PracticalKungFu/practicalkungfu.github.io
 theme:
   name: material
   palette:
