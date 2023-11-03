@@ -4,6 +4,7 @@ repo_url: https://github.com/PracticalKungFu/practicalkungfu.github.io
 repo_name: practicalkungfu.github.io
 theme:
   name: material
+  custom_dir: overrides
   palette:
     scheme: slate
   features:
@@ -15,6 +16,8 @@ theme:
     - navigation.top
 
 plugins:
+  - search
+  # - meta
   - blog:
       blog_dir: ./
       blog_toc: true
@@ -24,7 +27,6 @@ plugins:
       draft: false
       draft_on_serve: true
       draft_if_future_date: true
-  - search
   - rss:
       match_path: posts/.* 
       date_from_meta:
