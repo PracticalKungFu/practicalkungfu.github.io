@@ -17,7 +17,7 @@ dism /Online /Cleanup-Image /AnalyzeComponentStore
 Dism.exe /online /Cleanup-Image /StartComponentCleanup
 ```
 
-## Remove all superseded versions of companents
+## Remove all superseded versions of components
 ```
 Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
 ```
