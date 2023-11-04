@@ -44,6 +44,11 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
+extra:
+  analytics:
+    provider: custom
+    property: cloudflare
+
 nav:
   - Articles: index.md
   - About: about.md
