@@ -34,6 +34,8 @@ plugins:
       categories:
         - categories
         - tags
+  - minify:
+      minify_html: true
 
 markdown_extensions:
   - pymdownx.highlight:

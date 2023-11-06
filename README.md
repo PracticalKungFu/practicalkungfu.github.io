@@ -5,7 +5,9 @@ Website for [https://www.practicalkungfu.net/](https://www.practicalkungfu.net/)
 1. Install python
 2. Install pip
 3. Install packages:
+
 ```
 pip install mkdocs-material
 pip install mkdocs-rss-plugin
+pip install mkdocs-minify-plugin
 ```
