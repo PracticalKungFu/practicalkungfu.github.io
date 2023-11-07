@@ -6,6 +6,8 @@ categories:
   - Powershell
   - Scripting
   - Active Directory
+authors:
+  - tupcakes
 ---
 
 

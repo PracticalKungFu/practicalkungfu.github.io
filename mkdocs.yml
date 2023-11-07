@@ -1,12 +1,25 @@
 site_name: PracticalKungFu.net
 site_url: https://www.practicalkungfu.net/
+site_description: 
+copyright: Copywrite 2023 Mike Tupker
+site_author: Mike Tupker
 repo_url: https://github.com/PracticalKungFu/practicalkungfu.github.io
 repo_name: practicalkungfu.github.io
+
 theme:
   name: material
   custom_dir: overrides
   palette:
-    scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
   features:
     - content.code.copy
     - content.code.select
@@ -14,11 +27,14 @@ theme:
     - navigation.tracking
     - navigation.path
     - navigation.top
+    - search.highlight
+    - search.suggest
 
 plugins:
   - search
   # - meta
   - blog:
+      authors: true
       blog_dir: ./
       blog_toc: true
       archive_toc: true
@@ -50,6 +66,9 @@ extra:
   analytics:
     provider: custom
     property: cloudflare
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tupcakes
 
 nav:
   - Articles: index.md
