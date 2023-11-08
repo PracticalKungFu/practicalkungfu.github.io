@@ -1,7 +1,10 @@
 name: Publish docs via GitHub Pages
 on:
+  schedule: 
+    - cron: '0 0 * * *'
   push:
     branches:
+      - master 
       - main
 
 jobs:
