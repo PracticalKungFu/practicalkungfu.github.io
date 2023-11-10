@@ -28,5 +28,6 @@ I tried the installer script on Almalinux and CentOS 7 and it was pretty straigh
 ```shell
 wget https://github.com/aristocratos/btop/releases/download/v1.2.13/btop-x86_64-linux-musl.tbz
 tar -xjf btop-x86_64-linux-musl.tbz
+cd btop
 ./install.sh
 ```
