@@ -1,7 +1,7 @@
 ---
 comments: true
-draft: true
-date: 2023-01-01
+draft: false
+date: 2023-11-13
 categories:
   - Homelab
   - Hashi
@@ -14,12 +14,22 @@ authors:
 
 
 # Nomad, Consul, Gluster...Oh My
-The goal here is to setup a 5 node nomad cluster (3 servers and 5 clients), a 5 node consul cluster, and a storage backend using a 3 node gluster cluster (I love saying gluster cluster). Gluster is mounted to a VIP provided by keepalived.
+The goal here is to setup a 5 node nomad cluster (3 servers and 5 clients), a 5 node consul cluster, and a storage backend using a 3 node gluster cluster (I love saying gluster cluster). Gluster is mounted to a VIP provided by keepalived. I've found this gives a decent amount or resiliancy.
 
 For the nodes in this cluster I use Debian 12, Armbian, or DietPi. Basically all Debian 12.
 
 ## Servers and Roles
-nomad01 - old laptop - 10.28.0.19
+nomad01 (10.28.0.19) - old laptop
+
+- nomad server
+- nomad client
+- consul server
+- consul client
+- gluster storage
+- keepalived
+
+nomad02 (10.28.0.20) - old laptop
+
  - nomad server
  - nomad client
  - consul server
@@ -27,32 +37,32 @@ nomad01 - old laptop - 10.28.0.19
  - gluster storage
  - keepalived
 
-nomad02 - old laptop - 10.28.0.20
- - nomad server
- - nomad client
- - consul server
- - consul client
- - gluster storage
- - keepalived
+nomad03 (10.28.0.41) - libre computer renegade
 
-nomad03 - libre computer renegade - 10.28.0.41
  - nomad server
  - nomad client
  - consul server
  - consul client
  - gluster arbiter
 
-nomad04 - rpi 3 - 10.28.0.42
+nomad04 (10.28.0.42) - rpi 3
+
  - nomad client
  - consul client
 
-nomad05 - rpi 3 - 10.28.0.43
+nomad05 (10.28.0.43) - rpi 3
+
  - nomad client
  - consul client
 
 
-## Install Consul (Debian)
+## Install Consul
 Consul will be installed on all nodes in the cluster, because why not. It's very light weight.
+
+### Scope
+All servers
+
+### Install
 ```
 wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
@@ -120,7 +130,18 @@ systemctl start consul
 Any of the server hosts should have a web page available at: http://ip:8500/ui
 
 
-## Nomad Install (Debian)
+## Install Nomad
+
+### Scope
+Nomad servers
+
+- nomad01
+- nomad02
+- nomad03
+
+Nomad clients
+
+- all servers
 
 ### Install docker
 This step is pretty much straight out of the Docker [documentation](https://docs.docker.com/engine/install/debian/).
@@ -178,7 +199,7 @@ echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-ip6tables && \
 echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-iptables
 ```
 
-``` title=/etc/sysctl.d/bridge.conf
+``` title="/etc/sysctl.d/bridge.conf"
 net.bridge.bridge-nf-call-arptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -189,8 +210,9 @@ net.bridge.bridge-nf-call-iptables = 1
 mv /etc/nomad.d/nomad.hcl /etc/nomad.d/nomad.hcl.orig
 ```
 
-#### Nomad Server
+#### Nomad Server Config
 The server config also allows the host to be used when scheduling containers (the client stanza below). Use this config on the hosts you want to be nomad servers.
+
 ``` title="/etc/nomad.d/nomad.hcl"
 datacenter = "dc1"
 data_dir   = "/opt/nomad"
@@ -224,7 +246,7 @@ plugin "docker" {
 }
 ```
 
-#### Nomad Client
+#### Nomad Client Config
 The nomad client config below will only schedule jobs, but not be considered nomad servers.
 ``` title="/etc/nomad.d/nomad.hcl"
 datacenter = "dc1"
@@ -260,8 +282,13 @@ systemctl start nomad
 ### Web Interface
 Any of the server hosts should have a web page available at: http://ip:4646/ui
 
-## Keepalived Gluster VIP
-We use keepalived to provide a single IP that can float between 2 (or more) hosts if one goes down. Since only the first two nomad hosts are also gluster server with storage, we'll only configure it for 2 hosts.
+
+## Install Keepalived
+We use keepalived to provide a single IP to use when mounting gluster volumes. The IP can float between 2 (or more) hosts if one goes down. Since only the first two nomad hosts are also gluster server with storage, we'll only configure keepalived for 2 hosts.
+
+### Scope
+- nomad01
+- nomad02
 
 ### Install
 apt -y install keepalived
@@ -318,46 +345,63 @@ systemctl restart keepalived
 If you want to test it, you can stop keepalived on the MASTER host. The VIP should automaticaly move over to the BACKUP host.
 
 
-## Nomad Gluster Volume
+## Install Gluster
+Gluster server should be installed on at least 3 servers. In my setup I have two nodes that host the volume and a 3rd Raspberry Pi 3 that is an arbiter.
 
-### Install on All Gluster Server Nodes
+The arbiter is a member of the gluster pool that doesn't save any file data. It'll still have the directory struction in the brick.
+
+### Scope
+- nomad01
+- nomad02
+- nomad03
+
+### Install
 ```
 apt install glusterfs-server
 systemctl enable glusterd
 systemctl start glusterd
 ```
 
-### Configure
-
-Make the gluster file system location. Run on all nodes
+### Create Gluster Volume
+Make the gluster file system location. Run on all gluster nodes including the arbiter.
 ```
 mkdir -p /glusterfs/bricks/brick
 ```
 
-Create the volume with 2 replica and 1 arbiter (witness).
-
+Create the volume with 2 replica and 1 arbiter.
 ```
 gluster volume create nomad-vol replica 2 arbiter 1 transport tcp 10.28.0.19:/glusterfs/bricks/brick 10.28.0.20:/glusterfs/bricks/brick 10.28.0.41:/glusterfs/bricks/brick force
 ```
 
+### Start the Volume
 Start the volume and check status.
 ```
 gluster volume start nomad-vol
 gluster volume info
 ```
 
-### Mount Gluster Volume
+One thing of note with gluster is that you should NOT write directly to the brick location `/glusterfs/bricks/brick`. Doing so will not replicate the written data accross the other nodes. You need to mount the gluster volume to a mount point (described in the next section) and use that when reading/writing data.
+
+
+## Mount Gluster Volume
+
+### Scope
+All servers
+
+### Install Client
+The gluster client needs to be installed on all nodes in the nomad cluster.
 ```
 apt install glusterfs-client -y
 ```
 
-This assumes you have setup keepalived. Since nomad01 and nomad02 are both gluster hosts, we can use the keepalived VIP. Regardless if nomad01 goes down the VIP will just move over to nomad02 and the hosts will still be able to connect to the gluster storage.
+This assumes you have setup keepalived. Since nomad01 and nomad02 are both gluster hosts, we can use the keepalived VIP. Regardless if nomad01 goes down the VIP will just move over to nomad02 and the hosts in the nomad cluster will still be able to connect to the gluster storage.
 
-Create a mount point on all the hosts.
+### Create a mount point on all the hosts.
 ```
 mkdir /mnt/nomad-vol
 ```
 
+### Mount at Boot
 Add a mount line to the fstab of all the hosts so it mounts automatically at boot.
 ``` title="/etc/fstab"
 10.28.0.50:/nomad-vol /mnt/nomad-vol/ glusterfs  defaults,_netdev,x-systemd.requires=glusterd.service 0 0
@@ -367,3 +411,10 @@ Mount gluster.
 ```
 mount -a
 ```
+
+## Wrappup
+The whole hashi stack may seem complex, but for me is much simpler than somthing like Kubernetes, which I used to run before Nomad.
+
+The only thing from the hashi stack that I didn't go over in this guide is Vault, which is a secret store. Honestly I haven't looked that much at how it works, and will save that for a future article.
+
+In the next part of this series I'll go over how you can use Consul with DNS for service location.

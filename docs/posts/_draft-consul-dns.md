@@ -9,3 +9,5 @@ categories:
 authors:
   - tupcakes
 ---
+
+# Consul and DNS
