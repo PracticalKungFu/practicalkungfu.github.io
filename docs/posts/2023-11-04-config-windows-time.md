@@ -25,6 +25,8 @@ net start w32time
 w32tm /resync /rediscover /nowait
 ```
 
+<!-- more -->
+
 ## AD PDC
 In most setups the PDC should be configured to sync with an external time source. Other domain controllers should sync to it. The below command simply sets the PDC to sync with the NIST time source.
 ```

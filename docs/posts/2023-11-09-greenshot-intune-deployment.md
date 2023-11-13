@@ -15,6 +15,7 @@ Greenshot is a very nice program. However there is one thing that REALLY annoys 
 
 For this I used [this intune winget template](https://github.com/FlorianSLZ/scloud/blob/main/winget/winget-program-template/winget-program-template.zip). It consists of your usual detection, install, and uninstall scripts. Below I'll be going over the install script.
 
+<!-- more -->
 
 
 ```powershell

@@ -18,6 +18,8 @@ The goal here is to setup a 5 node nomad cluster (3 servers and 5 clients), a 5 
 
 For the nodes in this cluster I use Debian 12, Armbian, or DietPi. Basically all Debian 12.
 
+<!-- more -->
+
 ## Servers and Roles
 nomad01 (10.28.0.19) - old laptop
 

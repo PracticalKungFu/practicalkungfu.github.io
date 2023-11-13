@@ -17,13 +17,15 @@ Usually I use htop, or in the absense of that top, to do basic performance monit
 
 ![Alt text](assets/2023-11-08-btop.png)
 
+<!-- more -->
+
 btop has most if not all the features of htop with some additions including, network activity and basic disk IO.
 
 I was able to install it using the package manager on dietpi and Armbian. For distros though you might need to manually download and run the install script, or just compile from source.
 
 I tried the installer script on Almalinux and CentOS 7 and it was pretty straight forward.
 
- I'd never seen a tbz file before, but tar can handle them.
+I'd never seen a tbz file before, but tar can handle them.
 
 ```shell
 wget https://github.com/aristocratos/btop/releases/download/v1.2.13/btop-x86_64-linux-musl.tbz

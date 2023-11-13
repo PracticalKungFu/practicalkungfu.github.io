@@ -16,6 +16,7 @@ From: [https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/cl
 ```
 dism /Online /Cleanup-Image /AnalyzeComponentStore
 ```
+
 ## Remove previous versions of updated components
 ```
 Dism.exe /online /Cleanup-Image /StartComponentCleanup

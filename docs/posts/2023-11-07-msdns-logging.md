@@ -16,6 +16,9 @@ For auditing we have to setup our DNS servers to audit various events and querie
 
 ## Set logging settings
 The below command can be run on one of the dns servers. It will enable logging to a file at c:\dnslogs and enable log rollover.
+
+<!-- more -->
+
 ```powershell
 $setupFolder = "c:\dnslogs"
 New-Item -Path $setupFolder -type directory -Force
