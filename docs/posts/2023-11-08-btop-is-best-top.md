@@ -15,7 +15,7 @@ Usually I use htop, or in the absense of that top, to do basic performance monit
 
 [https://github.com/aristocratos/btop](https://github.com/aristocratos/btop)
 
-![Alt text](assets/2023-11-08-btop.png)
+![btop](assets/2023-11-08-btop.png)
 
 <!-- more -->
 
