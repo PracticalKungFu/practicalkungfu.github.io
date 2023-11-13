@@ -320,7 +320,9 @@ ip -brief addr
 ```
 
 ### Backup Config
-Note the `state BACKUP` and `priority 254` lines.
+!!! note
+    Note the `state BACKUP` and `priority 254` lines.
+
 ``` title="/etc/keepalived/keepalived.conf"
 vrrp_instance VI_1 {
         state BACKUP
@@ -380,7 +382,8 @@ gluster volume start nomad-vol
 gluster volume info
 ```
 
-One thing of note with gluster is that you should NOT write directly to the brick location `/glusterfs/bricks/brick`. Doing so will not replicate the written data accross the other nodes. You need to mount the gluster volume to a mount point (described in the next section) and use that when reading/writing data.
+!!! warning "Do not write directly to the brick location"
+    One thing of note with gluster is that you should NOT write directly to the brick location `/glusterfs/bricks/brick`. Doing so will not replicate the written data accross the other nodes. You need to mount the gluster volume to a mount point (described in the next section) and use that when reading/writing data.
 
 
 ## Mount Gluster Volume
