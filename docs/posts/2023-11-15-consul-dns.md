@@ -1,7 +1,6 @@
 ---
 comments: true
-draft: true
-date: 2023-01-01
+date: 2023-11-15
 categories:
   - Homelab
   - Hashi
@@ -11,13 +10,15 @@ authors:
 ---
 
 # Consul and DNS
-In the last post I described how to setup a small(ish) Hashi Nomad and Consul cluster. Using Consul for service discovery is something that took me a little while to figure out.
+In the last couple posts I described how to setup a small(ish) Hashi Nomad and Consul cluster. Using Consul for service discovery is something that took me a little while to figure out.
 
-Lets start by spinning up a whoami job.
+Lets start by spinning up the whoami job if you haven't already.
+
+<!-- more -->
 
 ??? note "whoami job definition"
 
-    ```hcl
+    ```
     job "whoami" {
       datacenters = ["dc1"]
 
@@ -119,17 +120,7 @@ Now you should be able to access the web app at the following address `http://wh
 
 That address still sucks, but it's a little better.
 
+## Wrappup
+This can be made better with Traefik. Traefik allows you to do SSL offload and acts as an ingress for web apps in the cluster.
 
-
-
-
-
-
-
-
-
-<!-- more -->
-
-
-
-## Trafik
+I was planning to add the Traefik setup to this post as well, but it was getting a little long. I'll seperate out Traefik into it's own post.
