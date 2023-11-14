@@ -1,7 +1,7 @@
 ---
 comments: true
 draft: true
-date: 2023-11-31
+date: 2023-11-29
 categories:
   - Homelab
   - Hashi
