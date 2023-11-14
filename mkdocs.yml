@@ -43,6 +43,7 @@ plugins:
       draft: false
       draft_on_serve: true
       draft_if_future_date: true
+      pagination_per_page: 1000
   - rss:
       match_path: posts/.* 
       date_from_meta:

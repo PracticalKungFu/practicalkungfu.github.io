@@ -14,6 +14,10 @@ authors:
 
 
 # Nomad, Consul, Gluster...Oh My
+!!! note
+
+    There is a lot here. I've done my best to make things correct, but I'm also still learning how a lot of nomad, consul, etc... work and their best practices. It's entirely possible I missed something or could have done something better.
+    
 The goal here is to setup a 5 node nomad cluster (3 servers and 5 clients), a 5 node consul cluster, and a storage backend using a 3 node gluster cluster (I love saying gluster cluster). Gluster is mounted to a VIP provided by keepalived. I've found this gives a decent amount or resiliancy.
 
 For the nodes in this cluster I use Debian 12, Armbian, or DietPi. Basically all Debian 12.

@@ -11,6 +11,10 @@ authors:
 
 
 # Nomad Jobs
+!!! note
+
+    There is a lot here. I've done my best to make things correct, but I'm also still learning how a lot of nomad, consul, etc... work and their best practices. It's entirely possible I missed something or could have done something better.
+    
 This is pretty easy once you get the hang of the job definitions. It's honestly not much diffent than docker-compose definitions.
 
 <!-- more -->

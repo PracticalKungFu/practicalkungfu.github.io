@@ -10,6 +10,10 @@ authors:
 ---
 
 # Consul and DNS
+!!! note
+
+    There is a lot here. I've done my best to make things correct, but I'm also still learning how a lot of nomad, consul, etc... work and their best practices. It's entirely possible I missed something or could have done something better.
+
 In the last couple posts I described how to setup a small(ish) Hashi Nomad and Consul cluster. Using Consul for service discovery is something that took me a little while to figure out.
 
 Lets start by spinning up the whoami job if you haven't already.
