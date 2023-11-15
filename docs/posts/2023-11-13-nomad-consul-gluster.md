@@ -292,6 +292,10 @@ Any of the server hosts should have a web page available at: http://ip:4646/ui
 ## Install Keepalived
 We use keepalived to provide a single IP to use when mounting gluster volumes. The IP can float between 2 (or more) hosts if one goes down. Since only the first two nomad hosts are also gluster server with storage, we'll only configure keepalived for 2 hosts.
 
+!!! info
+
+    [There is an alternative to using keepalived for HA that I've read about.](https://www.practicalkungfu.net/2023/11/13/nomad-consul-glusteroh-my/#mount-at-boot)
+
 ### Scope
 - nomad01
 - nomad02
@@ -411,10 +415,18 @@ mkdir /mnt/nomad-vol
 ```
 
 ### Mount at Boot
-Add a mount line to the fstab of all the hosts so it mounts automatically at boot.
+Add a mount line to the fstab of all the hosts so it mounts automatically.
 ``` title="/etc/fstab"
-10.28.0.50:/nomad-vol /mnt/nomad-vol/ glusterfs  defaults,_netdev,x-systemd.requires=glusterd.service 0 0
+10.28.0.50:/nomad-vol /mnt/nomad-vol/ glusterfs  defaults,_netdev,noauto,x-systemd.automount 0 0
 ```
+
+!!! info 
+
+    I found out you can also get HA without keepalived using `backup-volfile-servers=<volfile_server2>:<volfile_server3>`.
+    ```
+    10.28.0.19:/nomad-vol /mnt/nomad-vol/ glusterfs  defaults,_netdev,noauto,x-systemd.automount,backup-volfile-servers=10.28.0.20 0 0
+    ```
+
 
 Mount gluster.
 ```
@@ -427,3 +439,9 @@ The whole hashi stack may seem complex, but for me is much simpler than somthing
 The only thing from the hashi stack that I didn't go over in this guide is Vault, which is a secret store. Honestly I haven't looked that much at how it works, and will save that for a future article.
 
 In the next part of this series I'll go over how you can use Consul with DNS for service location.
+
+
+
+## Edits
+- Boot mounting wasn't working for some reason. Changed to mount on demand.
+- Option for HA without keepalived
