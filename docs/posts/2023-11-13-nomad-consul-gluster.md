@@ -190,46 +190,6 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt-get update && sudo apt-get install nomad
 ```
 
-### Install CNI plugins
-This allows network namespaces to use bridge mode. This must be done on all nodes in the cluster.
-```
-curl -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/releases/download/v1.0.0/cni-plugins-linux-$( [ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)"-v1.0.0.tgz && \
-  sudo mkdir -p /opt/cni/bin && \
-  sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz
-```
-
-#### Add to nomad config
-```hcl title="/etc/nomad.d/nomad.hcl"
-client {
-  enabled = true
-  cni_path = "/opt/cni/bin"
-  cni_config_dir = "/opt/cni/config"
-}
-```
-
-```
-mkdir /opt/cni/config
-```
-
-```
-systemctl restart nomad
-```
-
-I'll cover using cni to do things like macvlan and ipvlan in another post.
-
-#### Allow containers through bridge network
-```
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-arptables && \
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-ip6tables && \
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-iptables
-```
-
-``` title="/etc/sysctl.d/bridge.conf"
-net.bridge.bridge-nf-call-arptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-```
-
 ### Create config
 ```
 mv /etc/nomad.d/nomad.hcl /etc/nomad.d/nomad.hcl.orig
@@ -259,6 +219,8 @@ client {
   server_join {
     retry_join = ["10.28.0.19", "10.28.0.20", "10.28.0.41"]
   }
+  cni_path = "/opt/cni/bin"
+  cni_config_dir = "/opt/cni/config"
 }
 plugin "docker" {
   config {
@@ -286,6 +248,8 @@ client {
   server_join {
     retry_join = ["10.28.0.19", "10.28.0.20", "10.28.0.41"]
   }
+  cni_path = "/opt/cni/bin"
+  cni_config_dir = "/opt/cni/config"
 }
 plugin "docker" {
   config {
@@ -307,6 +271,45 @@ systemctl start nomad
 ### Web Interface
 Any of the server hosts should have a web page available at: http://ip:4646/ui
 
+### Install CNI plugins
+This allows network namespaces to use bridge mode. This must be done on all nodes in the cluster.
+```
+curl -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/releases/download/v1.0.0/cni-plugins-linux-$( [ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)"-v1.0.0.tgz && \
+  sudo mkdir -p /opt/cni/bin && \
+  sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz
+```
+
+#### Add to nomad config
+```hcl title="/etc/nomad.d/nomad.hcl"
+client {
+  enabled = true
+  cni_path = "/opt/cni/bin"
+  cni_config_dir = "/opt/cni/config"
+}
+```
+
+```
+mkdir /opt/cni/config
+```
+
+```
+systemctl restart nomad
+```
+
+#### Allow containers through bridge network
+```
+echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-arptables && \
+echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-ip6tables && \
+echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-iptables
+```
+
+``` title="/etc/sysctl.d/bridge.conf"
+net.bridge.bridge-nf-call-arptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+```
+
+I'll cover using cni to do things like macvlan and ipvlan in another post.
 
 ## Install Keepalived
 We use keepalived to provide a single IP to use when mounting gluster volumes. The IP can float between 2 (or more) hosts if one goes down. Since only the first two nomad hosts are also gluster server with storage, we'll only configure keepalived for 2 hosts.
