@@ -198,6 +198,25 @@ curl -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/relea
   sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz
 ```
 
+#### Add to nomad config
+```hcl title="/etc/nomad.d/nomad.hcl"
+client {
+  enabled = true
+  cni_path = "/opt/cni/bin"
+  cni_config_dir = "/opt/cni/config"
+}
+```
+
+```
+mkdir /opt/cni/config
+```
+
+```
+systemctl restart nomad
+```
+
+I'll cover using cni to do things like macvlan and ipvlan in another post.
+
 #### Allow containers through bridge network
 ```
 echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-arptables && \
@@ -443,5 +462,9 @@ In the next part of this series I'll go over how you can use Consul with DNS for
 
 
 ## Edits
-- Boot mounting wasn't working for some reason. Changed to mount on demand.
-- Option for HA without keepalived
+2023-11-15
+- Gluster boot mounting wasn't working for some reason. Changed to mount on demand.
+- Option for HA without keepalived.
+
+2023-11-17
+- Forgot to add cni config to nomad.hcl.
