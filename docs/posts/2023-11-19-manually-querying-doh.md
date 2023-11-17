@@ -2,8 +2,7 @@
 comments: true
 date: 2023-11-19
 categories:
-  - Powershell
-  - Scripting
+  - DNS
 authors:
   - tupcakes
 ---
