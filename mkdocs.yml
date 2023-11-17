@@ -68,8 +68,8 @@ markdown_extensions:
 
 extra:
   analytics:
-    provider: custom
-    property: cloudflare
+    provider: google
+    property: ${{env.GOOGLE_ANALYTICS_KEY}}
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tupcakes
