@@ -463,8 +463,10 @@ In the next part of this series I'll go over how you can use Consul with DNS for
 
 ## Edits
 2023-11-15
-- Gluster boot mounting wasn't working for some reason. Changed to mount on demand.
-- Option for HA without keepalived.
+
+  - Gluster boot mounting wasn't working for some reason. Changed to mount on demand.
+  - Option for HA without keepalived.
 
 2023-11-17
-- Forgot to add cni config to nomad.hcl.
+
+  - Forgot to add cni config to nomad.hcl.
