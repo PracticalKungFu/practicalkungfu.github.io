@@ -216,6 +216,7 @@ server {
 }
 client {
   enabled = true
+  bridge_network_hairpin_mode = true
   server_join {
     retry_join = ["10.28.0.19", "10.28.0.20", "10.28.0.41"]
   }
@@ -245,6 +246,7 @@ advertise {
 }
 client {
   enabled = true
+  bridge_network_hairpin_mode = true
   server_join {
     retry_join = ["10.28.0.19", "10.28.0.20", "10.28.0.41"]
   }
@@ -473,3 +475,7 @@ In the next part of this series I'll go over how you can use Consul with DNS for
 2023-11-17
 
   - Forgot to add cni config to nomad.hcl.
+
+2023-11-21
+
+  - Fixed hairpin situation when using ipvlan and macvlan
