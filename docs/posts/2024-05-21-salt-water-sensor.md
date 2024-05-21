@@ -5,6 +5,7 @@ date: 2024-05-21
 categories:
   - homeassistant
   - esphome
+  - hardware
 authors:
   - tupcakes
 ---
