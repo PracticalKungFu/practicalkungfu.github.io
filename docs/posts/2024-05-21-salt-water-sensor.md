@@ -33,7 +33,7 @@ I won't go into detail as there is plenty of examples online on how to wire up t
 ### Construction
 I used a dremmel to cut two round holes in one of the lids of the container for the distance sensor and another in the side of the container for the power cable. I stuck two pieces of 3m dual lock strips on the bottom to attach it to the top of the tank. I then sealed the gaps around the power cable and the sensor with hot glue.
 
-![alt text](assets/2024-05-21-salt-sensor-2.jpg)
+![alt text](assets/2024-05-21-salt-sensor-2.png)
 
 ## EspHome Code
 Here is the general code I came up with for the sensor. Basically it gets the raw distance in meters. There are two template sensors. One gets the salt level in the tank in cm and the other returns the tank level in a percentage.
