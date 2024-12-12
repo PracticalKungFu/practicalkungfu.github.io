@@ -14,9 +14,11 @@ authors:
 
 # Auto Update ControlD Folder Rules from https://github.com/hagezi/dns-blocklists
 
-## The issue
+## The Issue
 When recently I found the amazing repo at https://github.com/hagezi/dns-blocklists, which maintains various block lists in different formats. Including some for ControlD folder rule json exports.
 
+## Project Repo
+https://github.com/tupcakes/controld-updater
 
 <!-- more -->
 
