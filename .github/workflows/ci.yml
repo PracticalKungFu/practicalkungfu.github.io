@@ -35,7 +35,7 @@ jobs:
       - run: python3 -m pip install -r ./requirements.txt
       - run: mkdocs build --site-dir ./_site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v1
   deploy:
     environment:
       name: github-pages
